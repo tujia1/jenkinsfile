@@ -1,0 +1,35 @@
+#!groovy
+@Library('Jenkinslib') _
+
+def tools = new org.devops.tools()
+def build = new org.devops.build()
+
+String buildType = "${env.buildType}"
+String buildShell = "${env.buildShell}"
+String srcUrl = "${env.srcUrl}"
+String branchName = "${env.branchName}"
+
+pipeline{
+    agent{ node { label "master"}}
+    
+    stages{
+        stage('CheckOut'){
+            steps{
+               script{
+                   tools.PrintMes('开始检查代码','green')
+                   checkout([$class: 'GitSCM', branches: [[name: "${branchName}"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '085044c2-40aa-41d7-840c-779ba0e1ab39', url: "${srcUrl}"]]])
+               }
+            }
+        
+        }
+        stage('build'){
+            steps{
+                script{
+                    tools.PrintMes('开始构建','green')
+                    build.Build(buildType,buildShell)
+                }
+            }
+        }
+        
+    }
+}
