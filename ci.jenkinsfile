@@ -11,11 +11,14 @@ String branchName = "${env.branchName}"
 
 pipeline{
     agent{ node { label "master"}}
-    
     stages{
         stage('CheckOut'){
             steps{
                script{
+                   if("${runOpts}" == "GatlabPush"){
+                       branchName = branch - "refs/heads/"
+                   }
+                   println("${branchName}")
                    tools.PrintMes('开始下载代码','green')
                    checkout([$class: 'GitSCM', branches: [[name: "${branchName}"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'b3b4a409-ce9d-4a2e-93ac-55f026bd7d12', url: "${srcUrl}"]]])
                }
