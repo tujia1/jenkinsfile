@@ -14,7 +14,7 @@ pipeline{
     stages{
         stage('CheckOut'){
             steps{
-               script{
+                script{
                    if("${runOpts}" == "GatlabPush"){
                        branchName = branch - "refs/heads/"
                    }
