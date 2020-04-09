@@ -16,8 +16,8 @@ pipeline{
         stage('CheckOut'){
             steps{
                script{
-                   tools.PrintMes('开始检查代码','green')
-                   checkout([$class: 'GitSCM', branches: [[name: "${branchName}"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '085044c2-40aa-41d7-840c-779ba0e1ab39', url: "${srcUrl}"]]])
+                   tools.PrintMes('开始下载代码','green')
+                   checkout([$class: 'GitSCM', branches: [[name: "${branchName}"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'b3b4a409-ce9d-4a2e-93ac-55f026bd7d12', url: "${srcUrl}"]]])
                }
             }
         
