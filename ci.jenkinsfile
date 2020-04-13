@@ -9,18 +9,18 @@ String buildShell = "${env.buildShell}"
 String srcUrl = "${env.srcUrl}"
 String branchName = "${env.branchName}"
 
+//增加输出构建信息（构建者、构建分支）
+if ("${runOpts}" == "GitlabPush"){
+    branchName = branch - "refs/heads/"
+    currentBuild.description = "Trigger by ${userName} ${branch}"
+}
+
 pipeline{
     agent{ node { label "master"}}
     stages{
         stage('CheckOut'){
             steps{
                 script{
-                   if ("${runOpts}" == "GitlabPush"){
-                       branchName = branch - "refs/heads/"
-                   }
-                    
-                   println("${branchName}")
-                    
                    tools.PrintMes('开始下载代码','green')
                    checkout([$class: 'GitSCM', branches: [[name: "${branchName}"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'b3b4a409-ce9d-4a2e-93ac-55f026bd7d12', url: "${srcUrl}"]]])
                }
