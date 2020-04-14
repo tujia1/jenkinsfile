@@ -1,19 +1,25 @@
 #!groovy
 @Library('jenkinslib') _
 
+//导入共享库
 def tools = new org.devops.tools()
 def build = new org.devops.build()
+def gitlab = new org.devops.gitlab()
 
+//添加全局变量
 String buildType = "${env.buildType}"
 String buildShell = "${env.buildShell}"
 String srcUrl = "${env.srcUrl}"
 String branchName = "${env.branchName}"
 
-//增加输出构建信息（构建者、构建分支）
+
+//判断分支增加输出构建信息（构建者、构建分支）
 if ("${runOpts}" == "GitlabPush"){
     branchName = branch - "refs/heads/"
     currentBuild.description = "Trigger by ${userName} ${branch}"
+    gitlab.ChangeCommitStatus(projectId,commitSha,"running")
 }
+
 
 pipeline{
     agent{ node { label "master"}}
@@ -22,19 +28,52 @@ pipeline{
             steps{
                 script{
                    tools.PrintMes('开始下载代码','green')
-                   checkout([$class: 'GitSCM', branches: [[name: "${branchName}"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'b3b4a409-ce9d-4a2e-93ac-55f026bd7d12', url: "${srcUrl}"]]])
+                   checkout([$class: 'GitSCM', branches: [[name: "${branchName}"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'b3b4a409-ce9d-4a2e-9
+3ac-55f026bd7d12', url: "${srcUrl}"]]])
                }
             }
-        
+
         }
         stage('build'){
             steps{
                 script{
-                    tools.PrintMes('开始构建','green')
+                    tools.PrintMes('开始打包','green')
                     build.Build(buildType,buildShell)
                 }
             }
         }
-        
+
+    }
+    post{
+       always{
+           script{
+               println("执行完毕")
+           }
+
+       }
+
+       success{
+           script{
+               println("success")
+               gitlab.ChangeCommitStatus(projectId,commitSha,"success")
+           }
+
+       }
+
+       failure{
+          script{
+              println("failure")
+              gitlab.ChangeCommitStatus(projectId,commitSha,"failed")
+          }
+
+       }
+
+       aborted{
+          script{
+              println("aborted")
+              gitlab.ChangeCommitStatus(projectId,commitSha,"canceled")
+
+          }
+       }
     }
 }
