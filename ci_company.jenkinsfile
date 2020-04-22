@@ -1,0 +1,82 @@
+#!groovy
+@Library('jenkinslib') _
+
+//导入共享库
+def tools = new org.devops.tools()
+def build = new org.devops.build()
+def gitlab = new org.devops.gitlab()
+def toemail = new org.devops.toemail()
+
+//添加全局变量
+String buildType = "${env.buildType}"
+String buildShell = "${env.buildShell}"
+String srcUrl = "${env.srcUrl}"
+String branchName = "${env.branchName}"
+
+
+//判断分支增加输出构建信息（构建者、构建分支）
+if ("${runOpts}" == "GitlabPush"){
+    branchName = branch - "refs/heads/"
+    currentBuild.description = "Trigger by ${userName} ${branch}"
+    gitlab.ChangeCommitStatus(projectId,commitSha,"running")
+}
+
+
+pipeline{
+    agent{ node { label "master"}}
+    stages{
+        stage('CheckOut'){
+            steps{
+                script{
+                   tools.PrintMes('开始下载代码','green')
+                   checkout([$class: 'GitSCM', branches: [[name: "${branchName}"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'gitlab', url: "${srcUrl}"]]])
+               }
+            }
+
+        }
+        stage('build'){
+            steps{
+                script{
+                    tools.PrintMes('开始打包','green')
+                    build.Build(buildType,buildShell)
+                }
+            }
+        }
+
+    }
+    post{
+       always{
+           script{
+               println("执行完毕")
+           }
+
+       }
+
+       success{
+           script{
+               println("success")
+               gitlab.ChangeCommitStatus(projectId,commitSha,"success")
+               toemail.Email("流水线成功",userEmail)
+           }
+
+       }
+
+       failure{
+          script{
+              println("failure")
+              gitlab.ChangeCommitStatus(projectId,commitSha,"failed")
+              toemail.Email("流水线失败",userEmail)
+          }
+
+       }
+
+       aborted{
+          script{
+              println("aborted")
+              gitlab.ChangeCommitStatus(projectId,commitSha,"canceled")
+              toemail.Email("流水线取消",userEmail)
+
+          }
+       }
+    }
+}
