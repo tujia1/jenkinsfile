@@ -23,7 +23,7 @@ if ("${runOpts}" == "GitlabPush"){
 
 
 pipeline{
-    agent{ node { label "master"}}
+    agent{ node { label "node"}}
     stages{
         stage('CheckOut'){
             steps{
