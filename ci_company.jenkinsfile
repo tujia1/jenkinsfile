@@ -6,6 +6,7 @@ def tools = new org.devops.tools()
 def build = new org.devops.build()
 def gitlab = new org.devops.gitlab()
 def toemail = new org.devops.toemail()
+def sonar = new org.devops.sonarqube()
 
 //添加全局变量
 String buildType = "${env.buildType}"
@@ -42,7 +43,14 @@ pipeline{
                 }
             }
         }
-
+        stage('QA'){
+            steps{
+                script{
+                    tools.PrintMes('开始扫描','green')
+                    sonar.SonarScan("${JOB_NAME}","${JOB_NAME}","src")                
+                }
+            }        
+        }               
     }
     post{
        always{
