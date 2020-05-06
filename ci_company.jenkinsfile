@@ -7,6 +7,7 @@ def build = new org.devops.build()
 def gitlab = new org.devops.gitlab()
 def toemail = new org.devops.toemail()
 def sonar = new org.devops.sonarqube()
+def sonarapi = new org.devops.sonarapi()
 
 //添加全局变量
 String buildType = "${env.buildType}"
@@ -47,7 +48,18 @@ pipeline{
             steps{
                 script{
                     tools.PrintMes('开始扫描','green')
-                    sonar.SonarScan("test","${JOB_NAME}","${JOB_NAME}","src")                
+                    sonar.SonarScan("test","${JOB_NAME}","${JOB_NAME}","src")
+                    sleep 30
+                    tools.PrintMes('获取扫描结果','green')
+                    result = sonarapi.GetProjectStatus("${JOB_NAME}"
+                    if (result.toString() == "ERROR"){
+                        toemail.Email("代码质量阈错误！请及时修复！",userEmail)
+                        error " 代码质量阈错误！请及时修复！
+                        
+                    } else {
+                        println(result)
+                    }
+                    
                 }
             }        
         }               
