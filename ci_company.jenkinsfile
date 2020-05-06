@@ -56,10 +56,10 @@ pipeline{
                     result = resonarapi.SerarchProject("${JOB_NAME}")
                     println(result)
                     if(result == "false"){
-                        tools.PrintMes('<--------项目不存在，开始创建项目------->','red')
+                        tools.PrintMes('${JOB_NAME}----项目不存在，开始创建项目---${JOB_NAME}','red')
                         sonarapi.CreateProject("${JOB_NAME}")
                     } else {
-                        tools.PrintMes('项目已存在','green')
+                        tools.PrintMes('${JOB_NAME}-----项目已存在','green')
                     }    
                     
                     tools.PrintMes('开始扫描','green')
