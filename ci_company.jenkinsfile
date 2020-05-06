@@ -52,6 +52,17 @@ pipeline{
         stage('QA'){
             steps{
                 script{
+                    tools.PrintMes('搜索项目','green')
+                    result = resonarapi.SerarchProject("${JOB_NAME}")
+                    println(result)
+                    
+                    if(result == "false"){
+                        tools.PrintMes('<--------项目不存在，开始创建项目------->','red')
+                        sonarapi.CreateProject("${JOB_NAME}")
+                    } else {
+                        tools.PrintMes('项目已存在','green')
+                    }    
+                    
                     tools.PrintMes('开始扫描','green')
                     sonar.SonarScan("test","${JOB_NAME}","${JOB_NAME}","src")
                     tools.PrintMes("获取扫描结果","green")
