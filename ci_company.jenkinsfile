@@ -62,8 +62,17 @@ pipeline{
                         println("${JOB_NAME}---项目已存在！")
                     }    
                     
+                    tools.PrintMes("配置项目质量规则","green")
+                    qpName="${JOB_NAME}".split("-")[0]   //Sonar%20way
+                    sonarapi.ConfigQualityProfiles("${JOB_NAME}","java",qpName)
+             
+                    tools.PrintMes("配置质量阈","green")
+                    sonarapi.ConfigQualityGates("${JOB_NAME}",qpName)
+                                                
                     tools.PrintMes('开始扫描','green')
                     sonar.SonarScan("test","${JOB_NAME}","${JOB_NAME}","src")
+                    
+                    sleep 30
                     tools.PrintMes("获取扫描结果","green")
                     result = sonarapi.GetProjectStatus("${JOB_NAME}")
                     if (result.toString() == "ERROR"){
