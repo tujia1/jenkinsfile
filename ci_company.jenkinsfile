@@ -8,7 +8,7 @@ def gitlab = new org.devops.gitlab()
 def toemail = new org.devops.toemail()
 def sonar = new org.devops.sonarqube()
 def sonarapi = new org.devops.sonarapi()
-
+def talk = new org.devops.dingtalk()
 //添加全局变量
 String buildType = "${env.buildType}"
 String buildShell = "${env.buildShell}"
@@ -100,6 +100,7 @@ pipeline{
                    gitlab.ChangeCommitStatus(projectId,commitSha,"success")
                }    
                toemail.Email("流水线成功",userEmail)
+               talk.Dingtalk("流水线构建成功")
            }
 
        }
@@ -111,6 +112,7 @@ pipeline{
                   gitlab.ChangeCommitStatus(projectId,commitSha,"failed")
               }    
               toemail.Email("流水线失败",userEmail)
+              talk.Dingtalk("流水线构建失败")
           }
 
        }
@@ -122,6 +124,7 @@ pipeline{
                   gitlab.ChangeCommitStatus(projectId,commitSha,"canceled")
               }    
               toemail.Email("流水线取消",userEmail)
+              talk.Dingtalk("流水线构建取消")
 
           }
        }
