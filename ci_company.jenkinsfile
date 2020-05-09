@@ -25,7 +25,6 @@ if ("${runOpts}" == "GitlabPush"){
 
 } else {
     userEmail = "1207960652@qq.com"
-    branchName = "${env.branchName}"
 }    
     
 
