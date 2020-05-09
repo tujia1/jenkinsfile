@@ -9,11 +9,11 @@ def toemail = new org.devops.toemail()
 def sonar = new org.devops.sonarqube()
 def sonarapi = new org.devops.sonarapi()
 def talk = new org.devops.dingtalk()
+
 //添加全局变量
 String buildType = "${env.buildType}"
 String buildShell = "${env.buildShell}"
 String srcUrl = "${env.srcUrl}"
-String branchName = "${env.branchName}"
 
 //增加手动触发
 def runOpts
@@ -25,6 +25,7 @@ if ("${runOpts}" == "GitlabPush"){
 
 } else {
     userEmail = "1207960652@qq.com"
+    branchName = "${env.branchName}"
 }    
     
 
