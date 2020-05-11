@@ -37,6 +37,7 @@ pipeline{
                 wrap([$class: 'BuildUser']) {
                     script {
                       BuildUser = "${env.BUILD_USER}"
+                      return BuildUser
                     }
                 }
                 println BuildUser
