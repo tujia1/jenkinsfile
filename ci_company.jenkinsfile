@@ -35,7 +35,10 @@ pipeline{
         stage('CheckOut'){
             steps{
                 wrap([$class: 'BuildUser']) {
-                    BuildUser = "${env.BUILD_USER_ID}"
+                    script {
+                      BuildUser = "${env.BUILD_USER}"
+                      build.Build(buildType, projectDir, tag)
+                    }
                 }
                 println BuildUser
                 script{
