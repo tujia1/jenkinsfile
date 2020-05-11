@@ -32,11 +32,11 @@ if ("${runOpts}" == "GitlabPush"){
 pipeline{
     agent{ node { label "node"}}
     stages{
-        wrap([$class: 'BuildUser']) {
-            def user = env.BUILD_USER_ID
-        }
         stage('CheckOut'){
             steps{
+                wrap([$class: 'BuildUser']) {
+                    def user = env.BUILD_USER_ID
+                }
                 script{
                    tools.PrintMes('开始下载代码','green')
                    checkout([$class: 'GitSCM', branches: [[name: "${branchName}"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'gitlab', url: "${srcUrl}"]]])
