@@ -37,7 +37,6 @@ pipeline{
                 wrap([$class: 'BuildUser']) {
                     script {
                       BuildUser = "${env.BUILD_USER}"
-                      build.Build(buildType, projectDir, tag)
                     }
                 }
                 println BuildUser
