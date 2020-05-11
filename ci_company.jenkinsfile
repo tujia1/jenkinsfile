@@ -35,9 +35,9 @@ pipeline{
         stage('CheckOut'){
             steps{
                 wrap([$class: 'BuildUser']) {
-                    user = "${env.BUILD_USER_ID}"
+                    BuildUser = "${env.BUILD_USER_ID}"
                 }
-                println user
+                println BuildUser
                 script{
                    tools.PrintMes('开始下载代码','green')
                    checkout([$class: 'GitSCM', branches: [[name: "${branchName}"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'gitlab', url: "${srcUrl}"]]])
