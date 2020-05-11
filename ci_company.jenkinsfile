@@ -100,7 +100,7 @@ pipeline{
                    gitlab.ChangeCommitStatus(projectId,commitSha,"success")
                }    
                toemail.Email("流水线成功",userEmail)
-               talk.Dingtalk("流水线构建成功")
+               talk.dingtalk()
            }
 
        }
@@ -112,7 +112,7 @@ pipeline{
                   gitlab.ChangeCommitStatus(projectId,commitSha,"failed")
               }    
               toemail.Email("流水线失败",userEmail)
-              talk.Dingtalk("流水线构建失败")
+              talk.dingtalk()
           }
 
        }
@@ -124,7 +124,7 @@ pipeline{
                   gitlab.ChangeCommitStatus(projectId,commitSha,"canceled")
               }    
               toemail.Email("流水线取消",userEmail)
-              talk.Dingtalk("流水线构建取消")
+              talk.dingtalk()
 
           }
        }
