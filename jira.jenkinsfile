@@ -1,6 +1,6 @@
 #!groovy
 
-@Library('jenkinslibrary') _
+@Library('jenkinslib') _
 
 def gitlab = new org.devops.gitlab()
 def jira = new org.devops.jira()
