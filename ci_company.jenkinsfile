@@ -16,7 +16,7 @@ String buildShell = "${env.buildShell}"
 String srcUrl = "${env.srcUrl}"
 
 //增加手动触发
-
+def runOpts
 //判断分支增加输出构建信息（构建者、构建分支）
 if ("${runOpts}" == "GitlabPush"){
     branchName = branch - "refs/heads/"
