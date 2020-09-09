@@ -110,7 +110,7 @@ pipeline{
                             -DartifactId=${pomArtifact} -Dversion=${pomVersion}  \
                             -Dpackaging=${pomPackaging} -DrepositoryId=maven-host \
                             -Durl=http://106.52.119.43:8081/repository/maven-host/
-                    """
+                      """
                 }
             }
         }
