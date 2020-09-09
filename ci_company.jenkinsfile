@@ -90,7 +90,30 @@ pipeline{
                     }
                 }
             }        
-        }               
+        }
+        stage('上传制品库'){
+            steps{
+                script{
+                    def jarName = sh returnStdout: true, script: "cd target;ls *.jar"
+                    jarName = jarName - "\n"
+                    def pom = readMavenPom file: 'pom.xml'
+                    pomVersion = "${pom.version}" 
+                    pomArtifact = "${pom.artifactId}"
+                    pomPackaging = "${pom.packaging}"
+                    pomGroupId = "${pom.groupId}"
+                    println("${pomGroupId}-${pomArtifact}-${pomVersion}-${pomPackaging}")
+                    def mvnHome = tool "M2"
+                    sh  """
+                        cd target/
+                        ${mvnHome}/bin/mvn deploy:deploy-file -Dmaven.test.skip=true  \
+                            -Dfile=${jarName} -DgroupId=${pomGroupId} \
+                            -DartifactId=${pomArtifact} -Dversion=${pomVersion}  \
+                            -Dpackaging=${pomPackaging} -DrepositoryId=maven-host \
+                            -Durl=http://106.52.119.43:8081/repository/maven-host
+                    """
+                }
+            }
+        }
     }
     post{
        always{
