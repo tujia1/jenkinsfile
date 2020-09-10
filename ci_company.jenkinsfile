@@ -108,8 +108,8 @@ pipeline{
                         ${mvnHome}/bin/mvn deploy:deploy-file -Dmaven.test.skip=true  \
                             -Dfile=${jarName} -DgroupId=${pomGroupId} \
                             -DartifactId=${pomArtifact} -Dversion=${pomVersion}  \
-                            -Dpackaging=${pomPackaging} -DrepositoryId=maven-host \
-                            -Durl=http://106.52.119.43:8081/repository/maven-host/
+                            -Dpackaging=${pomPackaging} -DrepositoryId=maven-snapshots \
+                            -Durl=http://106.52.119.43:8081/repository/maven-snapshots/
                       """
                 }
             }
