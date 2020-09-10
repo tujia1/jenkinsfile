@@ -94,7 +94,7 @@ pipeline{
         stage('上传制品库'){
             steps{
                 script{
-                     tools.PrintMes('开始上传到制品库-maven-snapshots','green')
+                    tools.PrintMes('开始上传到制品库-maven-snapshots','green')
                     def jarName = sh returnStdout: true, script: "cd target;ls *.jar"
                     jarName = jarName - "\n"
                     def pom = readMavenPom file: 'pom.xml'
