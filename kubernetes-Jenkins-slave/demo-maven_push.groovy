@@ -73,7 +73,7 @@ pipeline{
                     gitlab.ChangeCommitStatus(projectId,commitSha,"running")
 
                 } else {
-                    userEmail = "1207960652@qq.com"
+                    userEmail = "######@qq.com"
                 }
                 ACTION = "${branchName}"    
                 tools.PrintMes('开始下载代码','green')
